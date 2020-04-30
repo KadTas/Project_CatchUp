@@ -30,7 +30,7 @@
 					<img src="images/img-01.png" alt="IMG">
 				</div>
 
-				<form class="login100-form validate-form" action="./traitement/traitement_login.php">
+				<form class="login100-form validate-form" method="POST" action="./traitement/traitement_login.php">
 					<span class="login100-form-title">
 						Member Login
 					</span>
