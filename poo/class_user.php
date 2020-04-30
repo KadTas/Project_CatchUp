@@ -4,6 +4,7 @@
     protected $_mail;
     protected $_token;
     protected $_validation;
+    protected $_usertype;
 
     public function __construct($_password, $_mail) {
         $this->_password = $_password;
@@ -36,6 +37,7 @@
     session_start();
     $_SESSION['email'] = $this->_mail;
     $_SESSION['pass'] = $this->_password;
+    $_SESSION['usertype_id'] = $this->_usertype;
     header("location:../index.php?id=success");
     }
     else

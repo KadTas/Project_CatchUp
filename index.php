@@ -1,19 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php 
-     // on se connecte à notre base
-     $server = "db5000303655.hosting-data.io";
-     $dbname = "dbs296642";
-     $user = "dbu526627";
-     $pass = ")uq6PE.9";
- 
-     try{
-        $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
-        $bdd = new PDO("mysql:host=$server;dbname=$dbname", $user, $pass,$pdo_options);
-     }
-     catch(Exception $e){
-        die('Erreur : '.$e->getMessage());
-	}      
+	require_once('./poo/class_database.php');
+	require_once('./poo/class_user.php');
+	session_start();
+
+	$connexion = new Database('db5000303655.hosting-data.io', 'dbs296642', 'dbu526627', ')uq6PE.9');
+  $bdd = $connexion->PDOConnexion();
  ?>
 	<head>
 		<meta charset="utf-8">
@@ -90,8 +83,18 @@
 					<!-- nav -->
 					<div class="section-row">
 						<ul class="nav-aside-menu">
+						<?php if ($_SESSION['usertype_id'] == 1) { ?>
+								<li><a href="profile.php">Profil</a></li>
+								<li><a href="./traitement/register.php">Déconnexion</a></li>
+						<?php }
+							elseif ($_SESSION['usertype_id'] == 3) { ?>
+								<li><a href="dashboard.php">Dashboard</a></li>
+								<li><a href="./traitement/logout.php">Déconnexion</a></li>
+							<?php }
+							else {?>
 							<li><a href="login.php">Connexion</a></li>
-							<li><a href="register.php">Inscription</a></li>
+								<li><a href="register.php">Inscription</a></li>
+							<?php } ?>
 							<li><a href="index.php">Home</a></li>
 							<li><a href="about.html">About Us</a></li>
 							<li><a href="#">Join Us</a></li>
