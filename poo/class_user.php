@@ -31,13 +31,13 @@
             ':pass' => $this->_password
         ));
 
-        $count = $req->rowCount();
-        if($count > 0)
+        $count = $req->fetch();
+        if($count != NULL)
     {
     session_start();
-    $_SESSION['email'] = $this->_mail;
-    $_SESSION['pass'] = $this->_password;
-    $_SESSION['usertype_id'] = $this->_usertype;
+    $_SESSION['email'] = $count['user_mail'];
+    $_SESSION['login'] = $count['user_login'];
+    $_SESSION['usertype_id'] = $count['usertype_id'];
     header("location:../index.php?id=success");
     }
     else

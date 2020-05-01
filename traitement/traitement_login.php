@@ -1,5 +1,5 @@
 <?php
-
+    session_start();
     require_once('../poo/class_database.php');
     require_once('../poo/class_user.php');
 

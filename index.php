@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php 
+	session_start();
 	require_once('./poo/class_database.php');
 	require_once('./poo/class_user.php');
-	session_start();
 
 	$connexion = new Database('db5000303655.hosting-data.io', 'dbs296642', 'dbu526627', ')uq6PE.9');
   $bdd = $connexion->PDOConnexion();
@@ -53,8 +53,18 @@
 
 						<!-- nav -->
 						<ul class="nav-menu nav navbar-nav">
+						<?php if ($_SESSION['usertype_id'] == '3') { ?>
+								<li><a href="profile.php">Profil</a></li>
+								<li><a href="./traitement/register.php">Déconnexion</a></li>
+						<?php }
+							elseif ($_SESSION['usertype_id'] == '1') { ?>
+								<li><a href="dashboard.php">Dashboard</a></li>
+								<li><a href="./traitement/logout.php">Déconnexion</a></li>
+							<?php }
+							else {?>
 							<li><a href="login.php">Connexion</a></li>
-							<li><a href="register.php">Inscription</a></li>
+								<li><a href="register.php">Inscription</a></li>
+							<?php } ?>
 							<?php $req= $bdd->prepare("SELECT * FROM T_categories");
 							$req->execute();
 							//boucle pour tout afficher
@@ -83,11 +93,11 @@
 					<!-- nav -->
 					<div class="section-row">
 						<ul class="nav-aside-menu">
-						<?php if ($_SESSION['usertype_id'] == 1) { ?>
+						<?php if ($_SESSION['usertype_id'] == '3') { ?>
 								<li><a href="profile.php">Profil</a></li>
 								<li><a href="./traitement/register.php">Déconnexion</a></li>
 						<?php }
-							elseif ($_SESSION['usertype_id'] == 3) { ?>
+							elseif ($_SESSION['usertype_id'] == '1') { ?>
 								<li><a href="dashboard.php">Dashboard</a></li>
 								<li><a href="./traitement/logout.php">Déconnexion</a></li>
 							<?php }
@@ -164,7 +174,7 @@
 							<h2>Articles Récents</h2>
 						</div>
 					</div>
-
+										<div><?php echo $_SESSION['usertype_id']?></div>
 					<!-- post -->
 					<?php $req= $bdd->prepare("SELECT * FROM T_article, T_categories, R_lier WHERE T_article.article_id = R_lier.article_id AND R_lier.categories_id = T_categories.categories_id ORDER BY article_date DESC");
 							$req->execute();
