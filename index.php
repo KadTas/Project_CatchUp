@@ -210,7 +210,7 @@
 							while($donnees = $req->fetch()) { ?>
 							<div class="col-md-6">
 								<div class="post">
-									<a class="post-img" href="blog-post.html"><img src="<?php echo $donnees['article_image']?>" alt=""></a>
+									<a class="post-img" href="blog-post.php?id=<?php echo $donnees['article_id'] ?>"><img src="<?php echo $donnees['article_image']?>" alt=""></a>
 									<div class="post-body">
 										<div class="post-meta">
 											<a class="post-category cat-<?php echo $donnees['categories_id'] ?>" href="category.php?id=<?php echo $donnees['categories_id'] ?>"><?php echo $donnees['categories_name'] ?></a>
