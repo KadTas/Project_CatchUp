@@ -14,7 +14,7 @@
     }
 
     public function register($bdd) {
-        $req= $bdd->prepare('INSERT INTO T_user (user_login, user_mail, user_password, user_confirmation, user_token) VALUES (:user_login, :user_mail, :user_password, :user_confirmation, :user_token)');
+        $req= $bdd->prepare('INSERT INTO T_user (user_login, user_mail, user_password, user_confirmation, user_token, usertype_id) VALUES (:user_login, :user_mail, :user_password, :user_confirmation, :user_token, :usertype_id)');
         $req->execute(array(
         ':user_login' => $this->_username,
         ':user_mail' => $this->_mail,
@@ -51,7 +51,7 @@
     public function sendmail($bdd) {
         $req = $bdd->prepare("SELECT * FROM T_user WHERE user_mail = '$this->_mail'" );
         $req->execute();
-        mail($this->_mail, "Test envoi de mail","Votre inscription a été effectuée, confirmez votre compte : http://tas.simplon-charleville.fr/poo-exo/confirm.php?id=$this->_token");
+        mail($this->_mail, "Test envoi de mail","Votre inscription a été effectuée, confirmez votre compte : http://tas.simplon-charleville.fr/CatchUp/traitement/confirm.php?id=$this->_token");
     }
 
     public function confirmed($bdd) {
