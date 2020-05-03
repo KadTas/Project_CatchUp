@@ -32,7 +32,7 @@
 
 				<form class="login100-form validate-form" method="POST" action="./traitement/traitement_register.php">
 					<span class="login100-form-title">
-						Member Login
+						Inscription
 					</span>
 
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
@@ -67,10 +67,10 @@
 
 					<div class="text-center p-t-12">
 						<span class="txt1">
-							Forgot
+							Retour à l'
 						</span>
-						<a class="txt2" href="#">
-							Username / Password?
+						<a class="txt2" href="./index.php">
+							index
 						</a>
 					</div>
 

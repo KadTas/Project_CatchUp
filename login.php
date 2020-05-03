@@ -58,11 +58,11 @@
 					</div>
 
 					<div class="text-center p-t-12">
-						<span class="txt1">
-							Forgot
+					<span class="txt1">
+							Retour à l'
 						</span>
-						<a class="txt2" href="#">
-							Username / Password?
+						<a class="txt2" href="./index.php">
+							index
 						</a>
 					</div>
 

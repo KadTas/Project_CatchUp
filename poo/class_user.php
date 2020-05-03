@@ -6,7 +6,8 @@
     protected $_validation;
     protected $_usertype;
 
-    public function __construct($_password, $_mail) {
+    public function __construct($_username, $_password, $_mail) {
+        $this->_username = $_username;
         $this->_password = $_password;
         $this->_mail = $_mail;
         $this->_token=substr(str_shuffle(str_repeat("0123456789azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN", 40)), 0, 40);

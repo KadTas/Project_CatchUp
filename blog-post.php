@@ -1,5 +1,13 @@
+<?php session_start();?>
 <!DOCTYPE html>
 <html lang="en">
+<?php 
+	require_once('./poo/class_database.php');
+	require_once('./poo/class_user.php');
+
+	$connexion = new Database('db5000303655.hosting-data.io', 'dbs296642', 'dbu526627', ')uq6PE.9');
+  $bdd = $connexion->PDOConnexion();
+ ?>
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -39,18 +47,30 @@
 					<div class="container">
 						<!-- logo -->
 						<div class="nav-logo">
-							<a href="index.html" class="logo"><img src="./img/logo.png" alt=""></a>
+							<a href="index.php" class="logo"><img src="./img/logo.png" alt=""></a>
 						</div>
 						<!-- /logo -->
 
 						<!-- nav -->
 						<ul class="nav-menu nav navbar-nav">
-							<li><a href="category.html">News</a></li>
-							<li><a href="category.html">Popular</a></li>
-							<li class="cat-1"><a href="category.html">Web Design</a></li>
-							<li class="cat-2"><a href="category.html">JavaScript</a></li>
-							<li class="cat-3"><a href="category.html">Css</a></li>
-							<li class="cat-4"><a href="category.html">Jquery</a></li>
+						<?php if ($_SESSION['usertype_id'] == '3') { ?>
+								<li><a href="profile.php">Profil</a></li>
+								<li><a href="./traitement/register.php">Déconnexion</a></li>
+						<?php }
+							elseif ($_SESSION['usertype_id'] == '1') { ?>
+								<li><a href="dashboard.php">Dashboard</a></li>
+								<li><a href="./traitement/logout.php">Déconnexion</a></li>
+							<?php }
+							else {?>
+							<li><a href="login.php">Connexion</a></li>
+								<li><a href="register.php">Inscription</a></li>
+							<?php } ?>
+							<?php $req= $bdd->prepare("SELECT * FROM T_categories");
+							$req->execute();
+							//boucle pour tout afficher
+							while($donnees = $req->fetch()) { ?>
+						<li class="cat-<?php echo $donnees['categories_id']?>"><a href="category.php?id=<?php echo $donnees['categories_id']?>"><?php echo $donnees['categories_name'] ?></a></li>
+							<?php } ?>
 						</ul>
 						<!-- /nav -->
 
@@ -127,18 +147,21 @@
 				<!-- Aside Nav -->
 			</div>
 			<!-- /Nav -->
-			
+			<?php $req= $bdd->prepare("SELECT * FROM T_article, T_categories, R_lier WHERE T_article.article_id = R_lier.article_id AND R_lier.categories_id = T_categories.categories_id AND T_article.article_id = $_GET[id]");
+							$req->execute();
+							//boucle pour tout afficher
+							$donnees = $req->fetch() ?>
 			<!-- Page Header -->
 			<div id="post-header" class="page-header">
-				<div class="background-img" style="background-image: url('./img/post-page.jpg');"></div>
+				<div class="background-img" style="background-image: url('<?php echo $donnees['article_image'] ?>');"></div>
 				<div class="container">
 					<div class="row">
 						<div class="col-md-10">
 							<div class="post-meta">
-								<a class="post-category cat-2" href="category.html">JavaScript</a>
-								<span class="post-date">March 27, 2018</span>
+								<a class="post-category cat-2" href="category.php?id=<?php echo $donnees['categories_id'] ?>"><?php echo $donnees['categories_name'] ?></a>
+								<span class="post-date"><?php echo $donnees['article_date'] ?></span>
 							</div>
-							<h1>Ask HN: Does Anybody Still Use JQuery?</h1>
+							<h1><?php echo $donnees['article_title']?></h1>
 						</div>
 					</div>
 				</div>
@@ -157,31 +180,9 @@
 					<div class="col-md-8">
 						<div class="section-row sticky-container">
 							<div class="main-post">
-								<h3>Lorem Ipsum: when, and when not to use it</h3>
-								<p>Do you like Cheese Whiz? Spray tan? Fake eyelashes? That's what is Lorem Ipsum to many—it rubs them the wrong way, all the way. It's unreal, uncanny, makes you wonder if something is wrong, it seems to seek your attention for all the wrong reasons. Usually, we prefer the real thing, wine without sulfur based preservatives, real butter, not margarine, and so we'd like our layouts and designs to be filled with real words, with thoughts that count, information that has value. </p>
-								<p>The toppings you may chose for that TV dinner pizza slice when you forgot to shop for foods, the paint you may slap on your face to impress the new boss is your business. But what about your daily bread? Design comps, layouts, wireframes—will your clients accept that you go about things the facile way? Authorities in our business will tell in no uncertain terms that Lorem Ipsum is that huge, huge no no to forswear forever. Not so fast, I'd say, there are some redeeming factors in favor of greeking text, as its use is merely the symptom of a worse problem to take into consideration.</p>
-								<figure class="figure-img">
-									<img class="img-responsive" src="./img/post-4.jpg" alt="">
-									<figcaption>So Lorem Ipsum is bad (not necessarily)</figcaption>
-								</figure>
-								<p>You begin with a text, you sculpt information, you chisel away what's not needed, you come to the point, make things clear, add value, you're a content person, you like words. Design is no afterthought, far from it, but it comes in a deserved second. Anyway, you still use Lorem Ipsum and rightly so, as it will always have a place in the web workers toolbox, as things happen, not always the way you like it, not always in the preferred order. Even if your less into design and more into content strategy you may find some redeeming value with, wait for it, dummy copy, no less.</p>
-								<p>There's lot of hate out there for a text that amounts to little more than garbled words in an old language. The villagers are out there with a vengeance to get that Frankenstein, wielding torches and pitchforks, wanting to tar and feather it at the least, running it out of town in shame.</p>
-								<p>One of the villagers, Kristina Halvorson from Adaptive Path, holds steadfastly to the notion that design can’t be tested without real content:</p>
-								<blockquote class="blockquote">
-									I’ve heard the argument that “lorem ipsum” is effective in wireframing or design because it helps people focus on the actual layout, or color scheme, or whatever. What kills me here is that we’re talking about creating a user experience that will (whether we like it or not) be DRIVEN by words. The entire structure of the page or app flow is FOR THE WORDS.
-								</blockquote>
-								<p>If that's what you think how bout the other way around? How can you evaluate content without design? No typography, no colors, no layout, no styles, all those things that convey the important signals that go beyond the mere textual, hierarchies of information, weight, emphasis, oblique stresses, priorities, all those subtle cues that also have visual and emotional appeal to the reader. Rigid proponents of content strategy may shun the use of dummy copy but then designers might want to ask them to provide style sheets with the copy decks they supply that are in tune with the design direction they require.</p>
-								<h3>Summing up, if the copy is diverting attention from the design it’s because it’s not up to task.</h3>
-								<p>Typographers of yore didn't come up with the concept of dummy copy because people thought that content is inconsequential window dressing, only there to be used by designers who can’t be bothered to read. Lorem Ipsum is needed because words matter, a lot. Just fill up a page with draft copy about the client’s business and they will actually read it and comment on it. They will be drawn to it, fiercely. Do it the wrong way and draft copy can derail your design review.</p>
+								<?php echo $donnees['article_content'] ?>
 							</div>
-							<div class="post-shares sticky-shares">
-								<a href="#" class="share-facebook"><i class="fa fa-facebook"></i></a>
-								<a href="#" class="share-twitter"><i class="fa fa-twitter"></i></a>
-								<a href="#" class="share-google-plus"><i class="fa fa-google-plus"></i></a>
-								<a href="#" class="share-pinterest"><i class="fa fa-pinterest"></i></a>
-								<a href="#" class="share-linkedin"><i class="fa fa-linkedin"></i></a>
-								<a href="#"><i class="fa fa-envelope"></i></a>
-							</div>
+							
 						</div>
 
 						<!-- ad -->
@@ -193,6 +194,10 @@
 						<!-- ad -->
 						
 						<!-- author -->
+						<?php $reqauth= $bdd->prepare("SELECT * FROM T_article, T_comment, T_user WHERE T_article.user_id = T_comment.user_id = T_user.user_id");
+							$reqauth->execute();
+							//boucle pour tout afficher
+							$donneesauth = $reqauth->fetch() ?>
 						<div class="section-row">
 							<div class="post-author">
 								<div class="media">
@@ -201,7 +206,7 @@
 									</div>
 									<div class="media-body">
 										<div class="media-heading">
-											<h3>John Doe</h3>
+											<h3><?php echo $donneesauth['user_login'] ?></h3>
 										</div>
 										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 										<ul class="author-social">
@@ -219,56 +224,33 @@
 						<!-- comments -->
 						<div class="section-row">
 							<div class="section-title">
-								<h2>3 Comments</h2>
+							<?php $reqcomm= $bdd->prepare("SELECT * FROM T_comment, T_article WHERE T_comment.article_id = T_article.article_id AND T_article.article_id = $_GET[id]");
+							$reqcomm->execute();
+							//boucle pour tout afficher
+							$countcomm = $reqcomm->rowCount() ?>
+								<h2><?php echo $countcomm ?> Comments</h2>
 							</div>
 
 							<div class="post-comments">
 								<!-- comment -->
+								<?php $reqcom= $bdd->prepare("SELECT * FROM T_comment, T_user WHERE T_comment.user_id = T_user.user_id AND T_comment.article_id = $_GET[id]");
+							$reqcom->execute();
+							//boucle pour tout afficher
+							while($donneescom = $reqcom->fetch()) { ?>
 								<div class="media">
 									<div class="media-left">
 										<img class="media-object" src="./img/avatar.png" alt="">
 									</div>
 									<div class="media-body">
 										<div class="media-heading">
-											<h4>John Doe</h4>
+											<h4><?php echo $donneescom['user_login'] ?></h4>
 											<span class="time">March 27, 2018 at 8:00 am</span>
 											<a href="#" class="reply">Reply</a>
 										</div>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-										<!-- comment -->
-										<div class="media">
-											<div class="media-left">
-												<img class="media-object" src="./img/avatar.png" alt="">
-											</div>
-											<div class="media-body">
-												<div class="media-heading">
-													<h4>John Doe</h4>
-													<span class="time">March 27, 2018 at 8:00 am</span>
-													<a href="#" class="reply">Reply</a>
-												</div>
-												<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-											</div>
-										</div>
-										<!-- /comment -->
+										<p><?php echo $donneescom['comment_content'] ?></p>
 									</div>
 								</div>
-								<!-- /comment -->
-
-								<!-- comment -->
-								<div class="media">
-									<div class="media-left">
-										<img class="media-object" src="./img/avatar.png" alt="">
-									</div>
-									<div class="media-body">
-										<div class="media-heading">
-											<h4>John Doe</h4>
-											<span class="time">March 27, 2018 at 8:00 am</span>
-											<a href="#" class="reply">Reply</a>
-										</div>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-									</div>
-								</div>
+							<?php } ?>
 								<!-- /comment -->
 							</div>
 						</div>
