@@ -97,8 +97,6 @@
 							<?php }
 							elseif ($_SESSION['usertype_id'] == '2') { ?>
 								<li><a href="./traitement/logout.php">Déconnexion</a></li>
-								<li><a href="archive_article.php">Historique Articles</a></li>
-								<li><a href="archive_comment.php">Historique Commentaires</a></li>
 								<li><a href="#">Join Us</a></li>
 								<li><a href="#">Advertisement</a></li>
 								<li><a href="contact.html">Contacts</a></li>
