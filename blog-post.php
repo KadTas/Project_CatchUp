@@ -53,18 +53,7 @@
 
 						<!-- nav -->
 						<ul class="nav-menu nav navbar-nav">
-						<?php if ($_SESSION['usertype_id'] == '3') { ?>
-								<li><a href="profile.php">Profil</a></li>
-								<li><a href="./traitement/register.php">Déconnexion</a></li>
-						<?php }
-							elseif ($_SESSION['usertype_id'] == '1') { ?>
-								<li><a href="dashboard.php">Dashboard</a></li>
-								<li><a href="./traitement/logout.php">Déconnexion</a></li>
-							<?php }
-							else {?>
-							<li><a href="login.php">Connexion</a></li>
-								<li><a href="register.php">Inscription</a></li>
-							<?php } ?>
+						
 							<?php $req= $bdd->prepare("SELECT * FROM T_categories");
 							$req->execute();
 							//boucle pour tout afficher
@@ -93,7 +82,32 @@
 					<!-- nav -->
 					<div class="section-row">
 						<ul class="nav-aside-menu">
-							<li><a href="index.html">Home</a></li>
+						<?php if ($_SESSION['usertype_id'] == '3') { ?>
+								<li><a href="profile.php">Profil</a></li>
+								<li><a href="./traitement/logout.php">Déconnexion</a></li>
+						<?php }
+							elseif ($_SESSION['usertype_id'] == '1') { ?>
+								<li><a href="dashboard.php">Dashboard</a></li>
+								<li><a href="./traitement/logout.php">Déconnexion</a></li>
+								<li><a href="archive_article.php">Historique Articles</a></li>
+								<li><a href="archive_comment.php">Historique Commentaires</a></li>
+								<li><a href="#">Join Us</a></li>
+								<li><a href="#">Advertisement</a></li>
+								<li><a href="contact.html">Contacts</a></li>
+							<?php }
+							elseif ($_SESSION['usertype_id'] == '2') { ?>
+								<li><a href="./traitement/logout.php">Déconnexion</a></li>
+								<li><a href="archive_article.php">Historique Articles</a></li>
+								<li><a href="archive_comment.php">Historique Commentaires</a></li>
+								<li><a href="#">Join Us</a></li>
+								<li><a href="#">Advertisement</a></li>
+								<li><a href="contact.html">Contacts</a></li>
+							<?php }
+							else {?>
+							<li><a href="login.php">Connexion</a></li>
+								<li><a href="register.php">Inscription</a></li>
+							<?php } ?>
+							<li><a href="index.php">Home</a></li>
 							<li><a href="about.html">About Us</a></li>
 							<li><a href="#">Join Us</a></li>
 							<li><a href="#">Advertisement</a></li>
@@ -220,11 +234,13 @@
 							</div>
 						</div>
 						<!-- /author -->
-
+						<?php if ($_SESSION['usertype_id'] == '1' OR $_SESSION['usertype_id'] =='2') { ?>
+						<a href="./traitement/hide_article.php?id=<?php echo $_GET[id]?>">Cacher l'article</a>
+						<?php } ?>
 						<!-- comments -->
 						<div class="section-row">
 							<div class="section-title">
-							<?php $reqcomm= $bdd->prepare("SELECT * FROM T_comment, T_article WHERE T_comment.article_id = T_article.article_id AND T_article.article_id = $_GET[id]");
+							<?php $reqcomm= $bdd->prepare("SELECT * FROM T_comment, T_article WHERE T_comment.article_id = T_article.article_id AND T_article.article_id = $_GET[id] AND T_comment.comment_visible = 1");
 							$reqcomm->execute();
 							//boucle pour tout afficher
 							$countcomm = $reqcomm->rowCount() ?>
@@ -233,7 +249,7 @@
 
 							<div class="post-comments">
 								<!-- comment -->
-								<?php $reqcom= $bdd->prepare("SELECT * FROM T_comment, T_user WHERE T_comment.user_id = T_user.user_id AND T_comment.article_id = $_GET[id]");
+								<?php $reqcom= $bdd->prepare("SELECT * FROM T_comment, T_user WHERE T_comment.user_id = T_user.user_id AND T_comment.article_id = $_GET[id] AND T_comment.comment_visible = 1");
 							$reqcom->execute();
 							//boucle pour tout afficher
 							while($donneescom = $reqcom->fetch()) { ?>
@@ -244,8 +260,9 @@
 									<div class="media-body">
 										<div class="media-heading">
 											<h4><?php echo $donneescom['user_login'] ?></h4>
-											<span class="time">March 27, 2018 at 8:00 am</span>
-											<a href="#" class="reply">Reply</a>
+											<?php if ($_SESSION['usertype_id'] == '1' OR $_SESSION['usertype_id'] =='2') { ?>
+											<a href="./traitement/hide_comment.php?id=<?php echo $donneescom[comment_id]?>">Cacher le commentaire</a>
+											<?php } ?>
 										</div>
 										<p><?php echo $donneescom['comment_content'] ?></p>
 									</div>
@@ -255,33 +272,15 @@
 							</div>
 						</div>
 						<!-- /comments -->
-
+						<?php if ($_SESSION['usertype_id'] == '1' OR $_SESSION['usertype_id'] =='2' OR $_SESSION['usertype_id'] =='3') { ?>
 						<!-- reply -->
 						<div class="section-row">
 							<div class="section-title">
 								<h2>Leave a reply</h2>
-								<p>your email address will not be published. required fields are marked *</p>
 							</div>
-							<form class="post-reply">
+							<form class="post-reply" method="POST" action="./traitement/comment_post.php?id=<?php echo $_GET['id'] ?>">
 								<div class="row">
-									<div class="col-md-4">
-										<div class="form-group">
-											<span>Name *</span>
-											<input class="input" type="text" name="name">
-										</div>
-									</div>
-									<div class="col-md-4">
-										<div class="form-group">
-											<span>Email *</span>
-											<input class="input" type="email" name="email">
-										</div>
-									</div>
-									<div class="col-md-4">
-										<div class="form-group">
-											<span>Website</span>
-											<input class="input" type="text" name="website">
-										</div>
-									</div>
+					
 									<div class="col-md-12">
 										<div class="form-group">
 											<textarea class="input" name="message" placeholder="Message"></textarea>
@@ -292,6 +291,7 @@
 							</form>
 						</div>
 						<!-- /reply -->
+						<?php } ?>
 					</div>
 					<!-- /Post content -->
 

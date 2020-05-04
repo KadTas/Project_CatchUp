@@ -53,18 +53,6 @@
 
 						<!-- nav -->
 						<ul class="nav-menu nav navbar-nav">
-						<?php if ($_SESSION['usertype_id'] == '3') { ?>
-								<li><a href="profile.php">Profil</a></li>
-								<li><a href="./traitement/register.php">Déconnexion</a></li>
-						<?php }
-							elseif ($_SESSION['usertype_id'] == '1') { ?>
-								<li><a href="dashboard.php">Dashboard</a></li>
-								<li><a href="./traitement/logout.php">Déconnexion</a></li>
-							<?php }
-							else {?>
-							<li><a href="login.php">Connexion</a></li>
-								<li><a href="register.php">Inscription</a></li>
-							<?php } ?>
 							<?php $req= $bdd->prepare("SELECT * FROM T_categories");
 							$req->execute();
 							//boucle pour tout afficher
@@ -95,11 +83,24 @@
 						<ul class="nav-aside-menu">
 						<?php if ($_SESSION['usertype_id'] == '3') { ?>
 								<li><a href="profile.php">Profil</a></li>
-								<li><a href="./traitement/register.php">Déconnexion</a></li>
+								<li><a href="./traitement/logout.php">Déconnexion</a></li>
 						<?php }
 							elseif ($_SESSION['usertype_id'] == '1') { ?>
 								<li><a href="dashboard.php">Dashboard</a></li>
 								<li><a href="./traitement/logout.php">Déconnexion</a></li>
+								<li><a href="archive_article.php">Historique Articles</a></li>
+								<li><a href="archive_comment.php">Historique Commentaires</a></li>
+								<li><a href="#">Join Us</a></li>
+								<li><a href="#">Advertisement</a></li>
+								<li><a href="contact.html">Contacts</a></li>
+							<?php }
+							elseif ($_SESSION['usertype_id'] == '2') { ?>
+								<li><a href="./traitement/logout.php">Déconnexion</a></li>
+								<li><a href="archive_article.php">Historique Articles</a></li>
+								<li><a href="archive_comment.php">Historique Commentaires</a></li>
+								<li><a href="#">Join Us</a></li>
+								<li><a href="#">Advertisement</a></li>
+								<li><a href="contact.html">Contacts</a></li>
 							<?php }
 							else {?>
 							<li><a href="login.php">Connexion</a></li>
@@ -175,7 +176,7 @@
 						</div>
 					</div>
 					<!-- post -->
-					<?php $req= $bdd->prepare("SELECT * FROM T_article, T_categories, R_lier WHERE T_article.article_id = R_lier.article_id AND R_lier.categories_id = T_categories.categories_id ORDER BY article_date DESC LIMIT 6");
+					<?php $req= $bdd->prepare("SELECT * FROM T_article, T_categories, R_lier WHERE T_article.article_id = R_lier.article_id AND R_lier.categories_id = T_categories.categories_id AND T_article.article_visible = 1 ORDER BY article_date DESC LIMIT 6");
 							$req->execute();
 							//boucle pour tout afficher
 							while($donnees = $req->fetch()) { ?>
@@ -204,7 +205,7 @@
 						<h2>Articles qui pourraient vous intéresser</h2>
 						</div>
 						<!-- post -->
-							<?php $req= $bdd->prepare("SELECT * FROM T_article, T_categories, R_lier WHERE T_article.article_id = R_lier.article_id AND R_lier.categories_id = T_categories.categories_id ORDER BY RAND() LIMIT 6");
+							<?php $req= $bdd->prepare("SELECT * FROM T_article, T_categories, R_lier WHERE T_article.article_id = R_lier.article_id AND R_lier.categories_id = T_categories.categories_id AND T_article.article_visible = 1 ORDER BY RAND() LIMIT 6");
 							$req->execute();
 							//boucle pour tout afficher
 							while($donnees = $req->fetch()) { ?>

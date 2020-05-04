@@ -6,17 +6,19 @@
     protected $_validation;
     protected $_usertype;
 
-    public function __construct($_username, $_password, $_mail) {
-        $this->_username = $_username;
+    public function __construct($_password, $_mail) {
         $this->_password = $_password;
         $this->_mail = $_mail;
         $this->_token=substr(str_shuffle(str_repeat("0123456789azertyuiopqsdfghjklmwxcvbnAZERTYUIOPQSDFGHJKLMWXCVBN", 40)), 0, 40);
     }
 
     public function register($bdd) {
+
+        $login = !empty($_POST['login']) ? $_POST['login'] : NULL;
+
         $req= $bdd->prepare('INSERT INTO T_user (user_login, user_mail, user_password, user_confirmation, user_token, usertype_id) VALUES (:user_login, :user_mail, :user_password, :user_confirmation, :user_token, :usertype_id)');
         $req->execute(array(
-        ':user_login' => $this->_username,
+        ':user_login' => $login,
         ':user_mail' => $this->_mail,
         ':user_password' => $this->_password,
         ':user_token' => $this->_token,
@@ -36,6 +38,7 @@
         if($count != NULL)
     {
     session_start();
+    $_SESSION['user_id'] = $count['user_id'];
     $_SESSION['email'] = $count['user_mail'];
     $_SESSION['login'] = $count['user_login'];
     $_SESSION['usertype_id'] = $count['usertype_id'];

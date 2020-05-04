@@ -53,7 +53,7 @@
 
 						<!-- nav -->
 						<ul class="nav-menu nav navbar-nav">
-				
+						
 							<?php $req= $bdd->prepare("SELECT * FROM T_categories");
 							$req->execute();
 							//boucle pour tout afficher
@@ -163,41 +163,12 @@
 			<!-- /Nav -->
 		</header>
 		<!-- /Header -->
-
-		<!-- section -->
-		<div class="section">
-			<!-- container -->
-			<div class="container">
-
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<div class="section-title">
-							<h2><?php echo $donnees['categories_name']?></h2>
-						</div>
-					</div>
-					<!-- post -->
-					<?php $req= $bdd->prepare("SELECT * FROM T_article, T_categories, R_lier WHERE T_article.article_id = R_lier.article_id AND R_lier.categories_id = T_categories.categories_id AND R_lier.categories_id = $_GET[id] ORDER BY article_date DESC");
+		<?php $req= $bdd->prepare("SELECT * FROM T_article, T_user, T_archive_article WHERE T_article.article_id = T_archive_article.article_id AND T_user.user_id = T_archive_article.user_id");
 							$req->execute();
 							//boucle pour tout afficher
 							while($donnees = $req->fetch()) { ?>
-					<div class="col-md-4">
-						<div class="post">
-							<a class="post-img" href="blog-post.php?id=<?php echo $donnees['article_id'] ?>"><img src="<?php echo $donnees['article_image']?>" alt=""></a>
-							<div class="post-body">
-								<div class="post-meta">
-									<a class="post-category cat-<?php echo $donnees['categories_id']?>" href="category.php?id=<?php echo $donnees['categories_id'] ?>"><?php echo $donnees['categories_name'] ?></a>
-									<span class="post-date"><?php echo $donnees['article_date']?></span>
-								</div>
-								<h3 class="post-title"><a href="blog-post.php?id=<?php echo $donnees['article_id'] ?>"><?php echo $donnees['article_title']?></a></h3>
-							</div>
-						</div>
-					</div>
+		<div><?php echo $donnees['user_login']?> a archivé <?php echo $donnees ['article_title']?> le <?php echo $donnees['archive_archive_date']?><a href='./traitement/restore_article.php?id=<?php echo $donnees['article_id']?>'>X</a><div>
 							<?php } ?>
-					<!-- /post -->
-
-					<div class="clearfix visible-md visible-lg"></div>
-
 		<!-- Footer -->
 		<footer id="footer">
 			<!-- container -->
